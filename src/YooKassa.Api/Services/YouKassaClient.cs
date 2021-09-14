@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -25,17 +22,37 @@ namespace YooKassa.Api.Services
 
         public async Task<Payments> GetPaymentsAsync(CancellationToken ct = default)
         {
-            HttpRequestMessage request = CreateRequest("payments", HttpMethod.Get);
+            _logger.LogInformation("Получение списка платежей");
+
+            using HttpRequestMessage request = CreateRequest("payments", HttpMethod.Get);
+            using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+
+            return await response.Content.ReadFromJsonAsync<Payments>(CustomJsonOptions.JsonSerializerOptions, ct);
+        }
+
+        public async Task<Payment> GetPaymentAsync(string paymentId, CancellationToken ct = default)
+        {
+            _logger.LogInformation("Получение платежа {paymentId}", paymentId);
+
+            using HttpRequestMessage request = CreateRequest($"payments/{paymentId}", HttpMethod.Get);
+            using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+
+            return await response.Content.ReadFromJsonAsync<Payment>(CustomJsonOptions.JsonSerializerOptions, ct);
+        }
+
+        public async Task<Payment> CreatePaymentAsync(NewPaymentData data, string idempotenceKey = null, CancellationToken ct = default)
+        {
+            _logger.LogInformation("Создание платежа {idempotenceKey}", idempotenceKey);
+
+            using HttpRequestMessage request = CreateRequest("payments", HttpMethod.Post);
+
+            request.Headers.Add("Idempotence-Key", idempotenceKey ?? Guid.NewGuid().ToString());
+            request.Content = JsonContent.Create(data, options: CustomJsonOptions.JsonSerializerOptions);
 
             using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
-            var s = await response.Content.ReadFromJsonAsync<Payments>(CustomJsonOptions.JsonSerializerOptions, ct);
-
-            return s;
+            return await response.Content.ReadFromJsonAsync<Payment>(CustomJsonOptions.JsonSerializerOptions, ct);
         }
 
-        private static HttpRequestMessage CreateRequest(string method, HttpMethod httpMethod)
-        {
-            return new HttpRequestMessage(httpMethod, method);
-        }
+        private static HttpRequestMessage CreateRequest(string method, HttpMethod httpMethod) => new(httpMethod, method);
     }
 }

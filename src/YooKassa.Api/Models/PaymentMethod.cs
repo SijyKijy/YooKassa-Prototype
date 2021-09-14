@@ -5,7 +5,7 @@ namespace YooKassa.Api.Models
     public enum PaymentMethodType
     {
         Unknown,
-        
+
         /// <summary>
         ///     Альфа-клик
         /// </summary>

@@ -21,5 +21,13 @@ namespace YooKassa.Api.Controllers
             Payments payments = await _apiClient.GetPaymentsAsync(ct);
             return Json(payments);
         }
+
+        [HttpGet]
+        [Route("{paymentId}")]
+        public async Task<IActionResult> GetPaymentAsync(string paymentId, CancellationToken ct)
+        {
+            Payment payments = await _apiClient.GetPaymentAsync(paymentId, ct);
+            return Json(payments);
+        }
     }
 }
