@@ -10,8 +10,8 @@ namespace YooKassa.Api.Options
             JsonSerializerOptions = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                PropertyNameCaseInsensitive = true,
                 IgnoreNullValues = true,
+                PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy()
             };
         }
 
