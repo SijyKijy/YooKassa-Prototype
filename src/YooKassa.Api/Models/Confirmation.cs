@@ -15,13 +15,11 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     URL, на который вернется пользователь после подтверждения или отмены платежа на веб-странице
         /// </summary>
-        [JsonPropertyName("return_url")]
         public string ReturnUrl { get; init; }
 
         /// <summary>
         ///     Диплинк на мобильное приложение, в котором пользователь подтверждает платеж
         /// </summary>
-        [JsonPropertyName("confirmation_url")]
         public string ConfirmationUrl { get; init; }
 
         /// <summary>
@@ -47,13 +45,11 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Токен для инициализации платежного <see href="https://yookassa.ru/developers/payment-forms/widget/basics">виджета ЮKassa</see>
         /// </summary>
-        [JsonPropertyName("confirmation_token")]
         public string ConfirmationToken { get; init; }
 
         /// <summary>
         ///     Данные для генерации QR-кода
         /// </summary>
-        [JsonPropertyName("confirmation_data")]
         public string ConfirmationData { get; init; }
     }
 }

@@ -30,7 +30,6 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Сумма платежа, которую получит магазин
         /// </summary>
-        [JsonPropertyName("income_amount")]
         public Amount IncomeAmount { get; init; }
 
         /// <summary>
@@ -50,7 +49,6 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Способ оплаты , который был использован для этого платежа
         /// </summary>
-        [JsonPropertyName("payment_method")]
         public PaymentMethod PaymentMethod { get; init; }
 
         /// <summary>
@@ -59,7 +57,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Указывается по UTC и передается в формате ISO 8601
         /// </remarks>
-        [JsonPropertyName("captured_at")]
         public DateTime? CapturedAt { get; init; }
 
         /// <summary>
@@ -68,7 +65,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Указывается по UTC и передается в формате ISO 8601
         /// </remarks>
-        [JsonPropertyName("create_at")]
         public DateTime? CreateAt { get; init; }
 
         /// <summary>
@@ -79,7 +75,6 @@ namespace YooKassa.Api.Models
         ///     <br/>
         ///     Указывается по UTC и передается в формате ISO 8601
         /// </remarks>
-        [JsonPropertyName("expires_at")]
         public DateTime? ExpiresAt { get; init; }
 
         /// <summary>
@@ -102,7 +97,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Присутствует, если у этого платежа есть успешные возвраты
         /// </remarks>
-        [JsonPropertyName("refunded_amount")]
         public Amount RefundedAmount { get; init; }
 
         /// <summary>
@@ -120,7 +114,6 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Статус доставки данных для чека в онлайн-кассу
         /// </summary>
-        [JsonPropertyName("receipt_registration")]
         public string ReceiptRegistration { get; init; } // TODO: Сделать enum https://yookassa.ru/developers/api#payment_object_receipt_registration
 
         /// <summary>
@@ -137,7 +130,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Подробнее про <see href="https://yookassa.ru/developers/payments/declined-payments">неуспешные платежи</see>
         /// </remarks>
-        [JsonPropertyName("cancellation_details")]
         public JsonElement? CancellationDetails { get; set; }
 
         /*

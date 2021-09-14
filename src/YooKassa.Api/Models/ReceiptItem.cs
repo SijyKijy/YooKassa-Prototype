@@ -31,19 +31,16 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Ставка НДС
         /// </summary>
-        [JsonPropertyName("vat_code")]
         public VatCode VatCode { get; init; }
 
         /// <summary>
         ///     Признак предмета расчета
         /// </summary>
-        [JsonPropertyName("payment_subject")]
         public string PaymentSubject { get; init; } // TODO: Сделать enum https://yookassa.ru/developers/54fz/parameters-values#payment-subject
 
         /// <summary>
         ///     Признак способа расчета
         /// </summary>
-        [JsonPropertyName("payment_mode")]
         public string PaymentMode { get; init; } // TODO: Сделать enum https://yookassa.ru/developers/54fz/parameters-values#payment-mode
 
         /// <summary>
@@ -58,7 +55,6 @@ namespace YooKassa.Api.Models
         ///     <br/>
         ///     Обязательный параметр, если товар нужно <see href="https://docs.cntd.ru/document/557297080">маркировать</see>
         /// </remarks>
-        [JsonPropertyName("product_code")]
         public string ProductCode { get; init; }
 
         /// <summary>
@@ -69,7 +65,6 @@ namespace YooKassa.Api.Models
         ///     <br/>
         ///     Онлайн-кассы, которые поддерживают этот параметр: Orange Data, Кит Инвест.
         /// </remarks>
-        [JsonPropertyName("country_of_origin_code")]
         public string CountryOfOriginCode { get; init; }
 
         /// <summary>
@@ -78,7 +73,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Онлайн-кассы, которые поддерживают этот параметр: Orange Data, Кит Инвест.
         /// </remarks>
-        [JsonPropertyName("customs_declaration_number")]
         public string CustomsDeclarationNumber { get; init; }
 
         /// <summary>

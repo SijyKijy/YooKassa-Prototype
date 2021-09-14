@@ -15,7 +15,6 @@ namespace YooKassa.Api.Models
         ///     <br/>
         ///     Онлайн-кассы, которые поддерживают этот параметр: Orange Data, АТОЛ Онлайн
         /// </remarks>
-        [JsonPropertyName("full_name")]
         public string FullName { get; init; }
 
         /// <summary>

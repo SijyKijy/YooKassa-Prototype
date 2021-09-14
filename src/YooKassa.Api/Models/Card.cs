@@ -5,9 +5,7 @@ namespace YooKassa.Api.Models
     public enum CardSourceType
     {
         Unknown,
-        [JsonPropertyName("apple_pay")]
         ApplePay,
-        [JsonPropertyName("google_pay")]
         GooglePay
     }
 
@@ -32,7 +30,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     YYYY
         /// </remarks>
-        [JsonPropertyName("expiry_year")]
         public string ExpiryYear { get; init; }
 
         /// <summary>
@@ -41,13 +38,11 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     MM
         /// </remarks>
-        [JsonPropertyName("expiry_month")]
         public string ExpiryMonth { get; init; }
 
         /// <summary>
         ///     Тип банковской карты
         /// </summary>
-        [JsonPropertyName("card_type")]
         public string CardType { get; init; }
 
         /// <summary>
@@ -56,13 +51,11 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///      Передается в формате ISO-3166 alpha-2. Пример: RU
         /// </remarks>
-        [JsonPropertyName("issuer_country")]
         public string IssuerCountry { get; init; }
 
         /// <summary>
         ///     Наименование банка, выпустившего карту.
         /// </summary>
-        [JsonPropertyName("issuer_name")]
         public string IssuerName { get; init; }
 
         /// <summary>

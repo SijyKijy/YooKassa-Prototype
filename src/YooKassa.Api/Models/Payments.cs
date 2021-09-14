@@ -7,7 +7,6 @@ namespace YooKassa.Api.Models
     {
         public string Type { get; init; }
 
-        [JsonPropertyName("next_cursor")]
         public string NextCursor { get; init; }
 
         public List<Payment> Items { get; init; }

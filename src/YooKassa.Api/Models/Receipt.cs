@@ -28,7 +28,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Параметр необходим, только если у вас несколько систем налогообложения, в остальных случаях не передается
         /// </remarks>
-        [JsonPropertyName("tax_system_code")]
         public TaxSystemCode? TaxSystemCode { get; init; }
     }
 }

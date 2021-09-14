@@ -38,13 +38,11 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Одноразовый токен для проведения оплаты, сформированный с помощью <see href="https://yookassa.ru/developers/payments/sdk-tokens">веб или мобильного SDK</see>
         /// </summary>
-        [JsonPropertyName("payment_token")]
         public string PaymentToken { get; init; }
 
         /// <summary>
         ///     Идентификатор <see href="https://yookassa.ru/developers/payments/recurring-payments">сохраненного способа оплаты</see>
         /// </summary>
-        [JsonPropertyName("payment_method_id")]
         public string PaymentMethodId { get; init; }
 
         /// <summary>
@@ -53,7 +51,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Вы можете не передавать этот объект в запросе. В этом случае пользователь будет выбирать способ оплаты на стороне ЮKassa.
         /// </remarks>
-        [JsonPropertyName("payment_method_data")]
         public PaymentMethod PaymentMethodData { get; init; }
 
         /// <summary>
@@ -83,7 +80,6 @@ namespace YooKassa.Api.Models
         /// <remarks>
         ///     Если не указан, используется IP-адрес TCP-подключения
         /// </remarks>
-        [JsonPropertyName("client_ip")]
         public string ClientIp { get; init; }
 
         /// <summary>
@@ -108,7 +104,6 @@ namespace YooKassa.Api.Models
         ///     <br/>
         ///     Присутствует, если вы хотите запомнить банковскую карту и отобразить ее при повторном платеже в <see href="https://yookassa.ru/developers/payment-forms/widget/basics">виджете ЮKassa</see>
         /// </remarks>
-        [JsonPropertyName("merchant_customer_id")]
         public string MerchantCustomerId { get; init; }
     }
 }

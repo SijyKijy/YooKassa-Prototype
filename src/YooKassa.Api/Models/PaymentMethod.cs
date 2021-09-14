@@ -9,19 +9,16 @@ namespace YooKassa.Api.Models
         /// <summary>
         ///     Альфа-клик
         /// </summary>
-        [JsonPropertyName("alfabank")]
         Alfabank,
 
         /// <summary>
         ///     Баланс телефона
         /// </summary>
-        [JsonPropertyName("mobile_balance")]
         MobileBalance,
 
         /// <summary>
         ///     Банковская карта
         /// </summary>
-        [JsonPropertyName("bank_card")]
         BankCard,
     }
 
