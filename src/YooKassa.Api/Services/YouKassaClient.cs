@@ -20,27 +20,31 @@ namespace YooKassa.Api.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<Payments> GetPaymentsAsync(CancellationToken ct = default)
+        public async Task<ResponseData<Payments>> GetPaymentsAsync(CancellationToken ct = default)
         {
             _logger.LogInformation("Получение списка платежей");
 
             using HttpRequestMessage request = CreateRequest("payments", HttpMethod.Get);
             using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
 
-            return await response.Content.ReadFromJsonAsync<Payments>(CustomJsonOptions.JsonSerializerOptions, ct);
+            return response.IsSuccessStatusCode
+                ? new() { Result = await response.Content.ReadFromJsonAsync<Payments>(CustomJsonOptions.JsonSerializerOptions, ct) }
+                : new() { Error = await response.Content.ReadFromJsonAsync<Error>(CustomJsonOptions.JsonSerializerOptions, ct) };
         }
 
-        public async Task<Payment> GetPaymentAsync(string paymentId, CancellationToken ct = default)
+        public async Task<ResponseData<Payment>> GetPaymentAsync(string paymentId, CancellationToken ct = default)
         {
             _logger.LogInformation("Получение платежа {paymentId}", paymentId);
 
             using HttpRequestMessage request = CreateRequest($"payments/{paymentId}", HttpMethod.Get);
             using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
 
-            return await response.Content.ReadFromJsonAsync<Payment>(CustomJsonOptions.JsonSerializerOptions, ct);
+            return response.IsSuccessStatusCode
+                ? new() { Result = await response.Content.ReadFromJsonAsync<Payment>(CustomJsonOptions.JsonSerializerOptions, ct) }
+                : new() { Error = await response.Content.ReadFromJsonAsync<Error>(CustomJsonOptions.JsonSerializerOptions, ct) };
         }
 
-        public async Task<Payment> CreatePaymentAsync(NewPaymentData data, string idempotenceKey = null, CancellationToken ct = default)
+        public async Task<ResponseData<Payment>> CreatePaymentAsync(NewPaymentData data, string idempotenceKey = null, CancellationToken ct = default)
         {
             _logger.LogInformation("Создание платежа {idempotenceKey}", idempotenceKey);
 
@@ -50,7 +54,10 @@ namespace YooKassa.Api.Services
             request.Content = JsonContent.Create(data, options: CustomJsonOptions.JsonSerializerOptions);
 
             using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
-            return await response.Content.ReadFromJsonAsync<Payment>(CustomJsonOptions.JsonSerializerOptions, ct);
+
+            return response.IsSuccessStatusCode
+                ? new() { Result = await response.Content.ReadFromJsonAsync<Payment>(CustomJsonOptions.JsonSerializerOptions, ct) }
+                : new() { Error = await response.Content.ReadFromJsonAsync<Error>(CustomJsonOptions.JsonSerializerOptions, ct) };
         }
 
         private static HttpRequestMessage CreateRequest(string method, HttpMethod httpMethod) => new(httpMethod, method);
