@@ -52,14 +52,6 @@ namespace YooKassa.Api
                 })
                 .ConfigureLogging(logging => logging.ClearProviders())
                 .UseNLog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                        webBuilder.UseKestrel((context, options) => options.ListenUnixSocket(context.Configuration["UnixSocket"]));
-                    else
-                        webBuilder.UseKestrel((context, options) => options.ListenLocalhost(context.Configuration.GetValue("Port", 5001)));
-
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
     }
 }
