@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace YooKassa.Api.Models
+﻿namespace YooKassa.Api.Models
 {
     /// <summary>
     ///     Информация о пользователе

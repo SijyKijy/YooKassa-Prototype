@@ -27,6 +27,7 @@ namespace YooKassa.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiClient(Configuration.GetSection("YooKassa"));
+            services.AddTelegramBots(Configuration.GetSection("Telegram"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

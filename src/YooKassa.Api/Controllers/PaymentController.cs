@@ -55,26 +55,32 @@ namespace YooKassa.Api.Controllers
         /// Пример запроса:
         ///
         ///     {
-        ///       "amount": {
-        ///         "value": "100",
-        ///         "currency": "RUB"
-        ///       },
-        ///       "receipt": {
-        ///         "customer": {
-        ///           "email": "genericaddress@gmail.ru",
-        ///           "phone": "+79000000000"
+        ///         "amount": {
+        ///             "value": "100.00",
+        ///             "currency": "RUB"
         ///         },
-        ///         "items": [
-        ///           {
-        ///             "description": "Test",
-        ///             "quantity": 1,
-        ///             "amount": {
-        ///               "value": "100",
-        ///               "currency": "RUB"
-        ///             }
-        ///           }
-        ///         ]
-        ///       }
+        ///         "confirmation": {
+        ///             "type": "redirect",
+        ///             "returnUrl": "https://www.google.com/"
+        ///         },
+        ///         "description": "Заказ №1",
+        ///         "receipt": {
+        ///             "customer": {
+        ///                 "email": "testmail@mail.com",
+        ///                 "phone": "+71234567890"
+        ///             },
+        ///             "items": [
+        ///                 {
+        ///                     "description": "TestItem1",
+        ///                     "quantity": "1",
+        ///                     "amount": {
+        ///                         "value": "2.00",
+        ///                         "currency": "RUB"
+        ///                     },
+        ///                     "vat_code": 1
+        ///                 }
+        ///             ]
+        ///         }
         ///     }
         ///
         /// </remarks>
