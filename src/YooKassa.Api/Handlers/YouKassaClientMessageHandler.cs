@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using YooKassa.Api.Options;
 
@@ -12,12 +11,10 @@ namespace YooKassa.Api.Handlers
 {
     public class YouKassaClientMessageHandler : DelegatingHandler
     {
-        private readonly ILogger<YouKassaClientMessageHandler> _logger;
         private readonly YooKassaOptions _options;
 
-        public YouKassaClientMessageHandler(ILogger<YouKassaClientMessageHandler> logger, IOptions<YooKassaOptions> options)
+        public YouKassaClientMessageHandler(IOptions<YooKassaOptions> options)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _options = options?.Value;
         }
 
