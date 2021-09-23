@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using NLog;
+using NLog.Extensions.Logging;
 using YooKassa.Api.Extensions;
 
 namespace YooKassa.Api
@@ -35,6 +37,8 @@ namespace YooKassa.Api
                 string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath, true);
             });
+
+            LogManager.Configuration = new NLogLoggingConfiguration(Configuration.GetSection("NLog"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
