@@ -21,13 +21,14 @@ namespace YooKassa.Api.Controllers
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(Payments), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetPaymentsAsync(CancellationToken ct)
         {
             ResponseData<Payments> result = await _apiClient.GetPaymentsAsync(ct);
 
             return result.Error is null
                 ? Json(result.Result)
-                : Json(result.Error);
+                : BadRequest(result.Error);
         }
 
         /// <summary>
@@ -37,13 +38,14 @@ namespace YooKassa.Api.Controllers
         [HttpGet]
         [Route("{paymentId}")]
         [ProducesResponseType(typeof(Payment), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetPaymentAsync(string paymentId, CancellationToken ct)
         {
             ResponseData<Payment> result = await _apiClient.GetPaymentAsync(paymentId, ct);
 
             return result.Error is null
                 ? Json(result.Result)
-                : Json(result.Error);
+                : BadRequest(result.Error);
         }
 
         /// <summary>
@@ -80,13 +82,14 @@ namespace YooKassa.Api.Controllers
         /// <param name="idempotenceKey">Ключ идемпотентности</param>
         [HttpPost]
         [ProducesResponseType(typeof(Payment), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreatePaymentAsync(NewPaymentData data, string idempotenceKey, CancellationToken ct)
         {
             ResponseData<Payment> result = await _apiClient.CreatePaymentAsync(data, idempotenceKey, ct);
 
             return result.Error is null
                 ? Json(result.Result)
-                : Json(result.Error);
+                : BadRequest(result.Error);
         }
     }
 }
