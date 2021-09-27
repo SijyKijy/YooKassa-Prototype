@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,84 +18,53 @@ namespace YooKassa.Api.Controllers
         }
 
         /// <summary>
-        ///     Получить список платежей
+        ///     Создать платёж на базе одноразового токена оплаты
         /// </summary>
-        [HttpGet]
-        [ProducesResponseType(typeof(Payments), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetPaymentsAsync(CancellationToken ct)
-        {
-            ResponseData<Payments> result = await _apiClient.GetPaymentsAsync(ct);
-
-            return result.Error is null
-                ? Json(result.Result)
-                : BadRequest(result.Error);
-        }
-
-        /// <summary>
-        ///     Получить платёж
-        /// </summary>
-        /// <param name="paymentId">Уникальный идентификатор платежа</param>
-        [HttpGet]
-        [Route("{paymentId}")]
-        [ProducesResponseType(typeof(Payment), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetPaymentAsync(string paymentId, CancellationToken ct)
-        {
-            ResponseData<Payment> result = await _apiClient.GetPaymentAsync(paymentId, ct);
-
-            return result.Error is null
-                ? Json(result.Result)
-                : BadRequest(result.Error);
-        }
-
-        /// <summary>
-        ///     Создать платёж
-        /// </summary>
-        /// <remarks>
-        /// Пример запроса:
-        ///
-        ///     {
-        ///         "amount": {
-        ///             "value": "100.00",
-        ///             "currency": "RUB"
-        ///         },
-        ///         "confirmation": {
-        ///             "type": "redirect",
-        ///             "returnUrl": "https://www.google.com/"
-        ///         },
-        ///         "description": "Заказ №1",
-        ///         "receipt": {
-        ///             "customer": {
-        ///                 "email": "testmail@mail.com",
-        ///                 "phone": "+71234567890"
-        ///             },
-        ///             "items": [
-        ///                 {
-        ///                     "description": "TestItem1",
-        ///                     "quantity": "1",
-        ///                     "amount": {
-        ///                         "value": "2.00",
-        ///                         "currency": "RUB"
-        ///                     },
-        ///                     "vat_code": 1
-        ///                 }
-        ///             ]
-        ///         }
-        ///     }
-        ///
-        /// </remarks>
         /// <param name="data">Исходные данные для создания платежа</param>
         /// <param name="idempotenceKey">Ключ идемпотентности</param>
         [HttpPost]
-        [ProducesResponseType(typeof(Payment), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreatePaymentAsync(NewPaymentData data, string idempotenceKey, CancellationToken ct)
+        public async Task<IActionResult> CreatePaymentByTokenAsync(NewPaymentByTokenData data, string idempotenceKey, CancellationToken ct)
         {
             ResponseData<Payment> result = await _apiClient.CreatePaymentAsync(data, idempotenceKey, ct);
 
             return result.Error is null
-                ? Json(result.Result)
+                ? Json(result.Result?.Confirmation?.ConfirmationUrl ?? "")
+                : BadRequest(result.Error);
+        }
+
+        /// <summary>
+        ///     Быстро cоздать платёж на базе одноразового токена оплаты.
+        /// </summary>
+        /// <remarks>
+        ///     Может не сработать
+        /// </remarks>
+        /// <param name="paymentToken">Одноразовый токен для проведения оплаты</param>
+        /// <param name="price">Сумма платежа</param>
+        /// <param name="idempotenceKey">Ключ идемпотентности</param>
+        [HttpPost]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
+        [Route("fast")]
+        public async Task<IActionResult> CreatePaymentByTokenAsync(
+            [Required] string paymentToken,
+            [Required] decimal price,
+            string idempotenceKey, CancellationToken ct)
+        {
+            NewPaymentByTokenData data = new()
+            {
+                Amount = new() { Value = price.ToString() },
+                PaymentToken = paymentToken,
+                Confirmation = new() { Type = "redirect", ReturnUrl = "https://yookassaapi-test.azurewebsites.net/confirm" },
+                Description = "Test fast token payment",
+                Metadata = new() { Id = 1, Name = "Super-Vlad" }
+            };
+
+            ResponseData<Payment> result = await _apiClient.CreatePaymentAsync(data, idempotenceKey, ct);
+
+            return result.Error is null
+                ? Json(result.Result?.Confirmation?.ConfirmationUrl ?? "")
                 : BadRequest(result.Error);
         }
     }

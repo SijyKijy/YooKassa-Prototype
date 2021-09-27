@@ -44,7 +44,7 @@ namespace YooKassa.Api.Services
                 : new() { Error = await response.Content.ReadFromJsonAsync<Error>(CustomJsonOptions.JsonSerializerOptions, ct) };
         }
 
-        public async Task<ResponseData<Payment>> CreatePaymentAsync(NewPaymentData data, string idempotenceKey = null, CancellationToken ct = default)
+        public async Task<ResponseData<Payment>> CreatePaymentAsync(NewPaymentByTokenData data, string idempotenceKey = null, CancellationToken ct = default)
         {
             _logger.LogInformation("Создание платежа {idempotenceKey}", idempotenceKey);
 

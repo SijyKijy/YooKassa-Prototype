@@ -59,6 +59,7 @@ namespace YooKassa.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", (r) => r.Response.WriteAsync("Test"));
+                endpoints.MapGet("/confirm", (r) => r.Response.WriteAsync("Confirmed! (Or not?)"));
                 endpoints.MapControllers();
             });
         }
