@@ -25,9 +25,19 @@ namespace YooKassa.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(PaymentResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreatePaymentByTokenAsync(NewPaymentByTokenData data, string idempotenceKey, CancellationToken ct)
+        public async Task<IActionResult> CreatePaymentByTokenAsync([Required] CreatePaymentData data,
+            string idempotenceKey, CancellationToken ct)
         {
-            ResponseData<Payment> result = await _apiClient.CreatePaymentAsync(data, idempotenceKey, ct);
+            NewPaymentByTokenData newPaymentData = new()
+            {
+                Amount = new() { Value = data.Price },
+                PaymentToken = data.PaymentToken,
+                Confirmation = new() { Type = "redirect", ReturnUrl = "https://yookassaapi-test.azurewebsites.net/confirm" },
+                Description = data.Description ?? "Test fast token payment",
+                Metadata = new() { Id = 1, Name = "User name" }
+            };
+
+            ResponseData<Payment> result = await _apiClient.CreatePaymentAsync(newPaymentData, idempotenceKey, ct);
 
             return result.Error is null
                 ? Json(new PaymentResponse() { Url = result.Result?.Confirmation?.ConfirmationUrl ?? "" })
@@ -35,32 +45,19 @@ namespace YooKassa.Api.Controllers
         }
 
         /// <summary>
-        ///     Быстро cоздать платёж на базе одноразового токена оплаты.
+        ///     Создать платёж на базе одноразового токена оплаты
         /// </summary>
         /// <remarks>
-        ///     Может не сработать
+        ///     Для тестов!
         /// </remarks>
-        /// <param name="paymentToken">Одноразовый токен для проведения оплаты</param>
-        /// <param name="price">Сумма платежа</param>
+        /// <param name="data">Исходные данные для создания платежа</param>
         /// <param name="idempotenceKey">Ключ идемпотентности</param>
         [HttpPost]
         [ProducesResponseType(typeof(PaymentResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-        [Route("fast")]
-        public async Task<IActionResult> CreatePaymentByTokenAsync(
-            [Required] string paymentToken,
-            [Required] decimal price,
-            string idempotenceKey, CancellationToken ct)
+        [Route("detail")]
+        public async Task<IActionResult> CreatePaymentByTokenAsync(NewPaymentByTokenData data, string idempotenceKey, CancellationToken ct)
         {
-            NewPaymentByTokenData data = new()
-            {
-                Amount = new() { Value = price.ToString() },
-                PaymentToken = paymentToken,
-                Confirmation = new() { Type = "redirect", ReturnUrl = "https://yookassaapi-test.azurewebsites.net/confirm" },
-                Description = "Test fast token payment",
-                Metadata = new() { Id = 1, Name = "Super-Vlad" }
-            };
-
             ResponseData<Payment> result = await _apiClient.CreatePaymentAsync(data, idempotenceKey, ct);
 
             return result.Error is null
